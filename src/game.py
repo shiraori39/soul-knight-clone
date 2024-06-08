@@ -17,7 +17,63 @@ pygame.mixer.init()
 world_size = (1280, 720)
 
 class Game:
+    """
+    A class to represent the main game.
+
+    Attributes
+    ----------
+    display : pygame.Surface
+        The main display surface.
+    screen : pygame.Surface
+        The game screen surface.
+    clock : pygame.time.Clock
+        The game clock for managing frame rate.
+    enemy_manager : EnemyManager
+        Manages enemy entities.
+    world_manager : WorldManager
+        Manages the game world.
+    object_manager : ObjectManager
+        Manages game objects.
+    bullet_manager : BulletManager
+        Manages bullets in the game.
+    player : Player
+        The player entity.
+    hud : Hud
+        The heads-up display for the game.
+    running : bool
+        Indicates if the game loop is running.
+    menu : MainMenu
+        The main menu of the game.
+    mini_map : MiniMap
+        The mini-map display.
+    game_time : int or None
+        The game time in milliseconds.
+    fps : int
+        Frames per second setting.
+    game_over : GameOver
+        The game over screen.
+    dt : float
+        Delta time between frames.
+    screen_position : tuple
+        The position of the screen.
+
+    Methods
+    -------
+    refresh():
+        Resets and restarts the game.
+    update_groups():
+        Updates all game entities and objects.
+    draw_groups():
+        Draws all game entities and objects to the screen.
+    input():
+        Handles player input and events.
+    run_game():
+        Runs the main game loop.
+    """
     def __init__(self):
+        """
+        Initializes all the game components and settings.
+        """
         self.display = pygame.display.set_mode(world_size)
         self.screen = pygame.Surface(world_size).convert()
         self.clock = pygame.time.Clock()
@@ -38,10 +94,16 @@ class Game:
         self.screen_position = (0, 0)
 
     def refresh(self):
+        """
+        Resets and restarts the game, refreshing the game state and display.
+        """
         self.__init__()
         pygame.display.flip()
         self.run_game()
     def update_groups(self):
+        """
+        Updates all game entities and objects.
+        """
         self.enemy_manager.update_enemies()
         self.object_manager.update()
         self.player.update()
@@ -51,6 +113,9 @@ class Game:
         self.mini_map.update()
 
     def draw_groups(self):
+        """
+        Draws all game entities and objects to the screen.
+        """
         self.world_manager.draw_map(self.screen)
         if self.player:
             self.player.draw(self.screen)
@@ -62,6 +127,9 @@ class Game:
         self.game_over.draw()
 
     def input(self):
+        """
+        Handles player input and events.
+        """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -81,6 +149,9 @@ class Game:
             self.menu.play_button.clicked = False
 
     def run_game(self):
+        """
+        Runs the main game loop, updating and drawing the game each frame.
+        """
         self.enemy_manager.add_enemies()
         prev_time = time.time()
         while self.running:
